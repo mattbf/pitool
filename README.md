@@ -4,9 +4,9 @@ In the project directory, you can run:
 
 ### `Resources`
 
-Read the PI Web API Documentation [here](https://github.com/osisoft/OSI-Samples/tree/master/piwebapi_samples)
-View the OSI PI Web API youtube series [here](https://www.youtube.com/watch?v=OXr69rqLJcU&list=PLMcG1Hs2JbcvGH0VCE4o-CjjaUkTiW5_D)
-Visit the PiSquare developers community [here](https://pisquare.osisoft.com/community/developers-club/)
+Read the PI Web API Documentation [here](https://github.com/osisoft/OSI-Samples/tree/master/piwebapi_samples)<br/>
+View the OSI PI Web API youtube series [here](https://www.youtube.com/watch?v=OXr69rqLJcU&list=PLMcG1Hs2JbcvGH0VCE4o-CjjaUkTiW5_D)<br/>
+Visit the PiSquare developers community [here](https://pisquare.osisoft.com/community/developers-club/)<br/>
 
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
