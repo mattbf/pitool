@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import PIAuthentication from './API/PIAuthentication.js';
 
 function MadeWithLove() {
   return (
@@ -52,6 +54,13 @@ const useStyles = makeStyles(theme => ({
 
 function SignIn() {
   const classes = useStyles();
+  const tryAuth = PIAuthentication()
+  function handleSubmit() {
+    tryAuth({
+      username: 'xxxx',
+      password: 'xxxx',
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,6 +105,7 @@ function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Sign In
           </Button>
@@ -113,6 +123,14 @@ function SignIn() {
           </Grid>
         </form>
       </div>
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit}
+      >
+        Sign In
+      </Button>
       <Box mt={5}>
         <MadeWithLove />
       </Box>
