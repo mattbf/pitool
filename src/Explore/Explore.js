@@ -22,6 +22,7 @@ import {
   FormControl,
   FormControlLabel,
   Checkbox,
+  Box,
 } from '@material-ui/core';
 
 import {
@@ -42,13 +43,19 @@ const appBarHeight = 100;
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+    height: '100vh',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     height: appBarHeight,
   },
+  toolbar: {
+    padding: '0px',
+    height: '100%',
+  },
   menuButton: {
     marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
   hide: {
     display: 'none',
@@ -72,7 +79,10 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    marginTop: appBarHeight,
+    border: 'solid',
+    borderColor: '#ff4578',
+    height: '100%' - appBarHeight,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -87,6 +97,26 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 0,
   },
   fullpaper: {
+    width: '100%',
+    height: '100%',
+    border: 'solid',
+    borderColor: '#00C888',
+  },
+  searchWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+
+  },
+  barControls: {
+    position: 'absolute',
+    bottom: '0px',
+    right: '0px',
+    padding: theme.spacing(0),
+  },
+  fullgrid: {
     width: '100%',
     height: '100%',
   }
@@ -139,7 +169,7 @@ export default function PersistentDrawerLeft() {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <IconButton
             color="inherit"
             aria-label="Open drawer"
@@ -149,37 +179,37 @@ export default function PersistentDrawerLeft() {
           >
             {open ? <Close /> : <SubdirectoryArrowRight /> }
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Persistent drawer
-          </Typography>
-          <FormGroup row>
-             <FormControlLabel
-               control={
-                 <WhiteCheckbox
-                   checked={view.output}
-                   onChange={selectView('output')}
-                   value="output"
-                   color="secondary"
-                 />
-               }
-               label="Output"
-             />
-             <FormControlLabel
-               control={
-                 <WhiteCheckbox
-                    checked={view.trend}
-                    onChange={selectView('trend')}
-                    value="trend"
-                    color="secondary"
-                  />
-               }
-               label="Trend"
-             />
-          </FormGroup>
-          // {view.trend.toString()}
-          // {view.output.toString()}
-          // {trendNum.toString()}
-          // {outputNum.toString()}
+          <div className={classes.searchWrapper}>
+            <Typography variant="h6" noWrap>
+              Explore
+            </Typography>
+          </div>
+          <div className={classes.barControls}>
+            <FormGroup row>
+               <FormControlLabel
+                 control={
+                   <WhiteCheckbox
+                     checked={view.output}
+                     onChange={selectView('output')}
+                     value="output"
+                     color="secondary"
+                   />
+                 }
+                 label="Output"
+               />
+               <FormControlLabel
+                 control={
+                   <WhiteCheckbox
+                      checked={view.trend}
+                      onChange={selectView('trend')}
+                      value="trend"
+                      color="secondary"
+                    />
+                 }
+                 label="Trend"
+               />
+            </FormGroup>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -220,19 +250,19 @@ export default function PersistentDrawerLeft() {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader} />
-        <div className={classes.root}>
-          <Grid container spacing={3}>
+
+        <div>
+          <Grid container spacing={0} className={classes.fullgrid}>
             {view.output ?
-              <Grid item xs={12} sm={outputNum} md={outputNum}>
-                <Paper className={classes.fullpaper}> Output </Paper>
+              <Grid item xs={12} sm={outputNum} md={outputNum} className={classes.fullgrid}>
+                <Box className={classes.fullpaper}> Output </Box>
               </Grid>
               :
               null
             }
             {view.trend ?
-              <Grid item xs={12} sm={trendNum} md={trendNum}>
-                <Paper className={classes.fullpaper}> Trend </Paper>
+              <Grid item xs={12} sm={trendNum} md={trendNum} className={classes.fullgrid}>
+                <Box className={classes.fullpaper}> Trend </Box>
               </Grid>
               :
               null
