@@ -16,18 +16,6 @@ import ErrorCard from './Components/ErrorCard.js';
 
 import PIAuthentication from './API/PIAuthentication.js';
 
-function MadeWithLove() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Built with love by the '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
-      </Link>
-      {' team.'}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -51,7 +39,30 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+ link: {
+   textDecoration: 'none',
+   color: 'inherit',
+   '&:hover': {
+     textDecoration: 'underline',
+     cursor: 'pointer',
+     color: theme.palette.primary.main,
+   },
+ },
 }));
+
+function ExternalLinks() {
+  const classes = useStyles();
+  return (
+    <div>
+      <Typography variant="body2" color="textSecondary" align="center" className={classes.externallinks}>
+        {'Read the '}
+      <a target="_blank" color="inherit" href="https://google.com/" className={classes.link}>Documentation</a>
+        {' or contact '}
+        <a color="inherit" href="mailto:name@email.com" className={classes.link}>Support</a>
+      </Typography>
+    </div>
+  );
+}
 
 function SignIn() {
   const classes = useStyles();
@@ -140,7 +151,7 @@ function SignIn() {
         Sign In
       </Button>
       <Box mt={5}>
-        <MadeWithLove />
+        <ExternalLinks />
       </Box>
     </Container>
   );

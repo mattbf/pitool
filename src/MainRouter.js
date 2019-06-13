@@ -9,6 +9,7 @@ import {
 
 import SignIn from './SignIn.js';
 import Home from './Home.js';
+import Explore from './Explore/Explore.js';
 
 const auth = false
 
@@ -38,7 +39,7 @@ function MainRouter(){
       <h2> Auth: {auth.toString()} </h2>
       <PrivateRoute path='/' exact component={Home}/>
       <Route path='/signin' component={SignIn}/>
-
+      <Route path='/explore' component={Explore}/>
     </Router>
   )
 }
