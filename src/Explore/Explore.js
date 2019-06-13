@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import {
   Drawer,
@@ -14,17 +15,29 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Grid,
+  Paper,
+  FormGroup,
+  FormLabel,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core';
 
 import {
-  MenuIcon,
-  InboxIcon,
-  MailIcon,
+  Menu,
+  Inbox,
+  Mail,
   UnfoldMore,
   UnfoldLess,
+  ChevronLeft,
+  ChevronRight,
+  SubdirectoryArrowRight,
+  Close,
 } from '@material-ui/icons';
 
 const drawerWidth = 240;
+const appBarHeight = 100;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +45,7 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    height: appBarHeight,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -52,8 +66,8 @@ const useStyles = makeStyles(theme => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
+    paddingTop: appBarHeight + theme.spacing(2),
+    padding: theme.spacing(2),
     justifyContent: 'flex-end',
   },
   content: {
@@ -72,22 +86,48 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
+  fullpaper: {
+    width: '100%',
+    height: '100%',
+  }
 }));
+
+const WhiteCheckbox = withStyles({
+  root: {
+    color: '#FFF',
+    '&$checked': {
+      color: 'secondary',
+    },
+  },
+  checked: {},
+})(props => <Checkbox color="default" {...props} />);
+
 
 export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
+  const [collapse, setCollapse] = React.useState(false);
+  const [outputView, setOutputView] = React.useState(true);
+  const [trendView, setTrendView] = React.useState(true);
 
-  function handleDrawerOpen() {
-    setOpen(true);
-  }
+  const [view, setView] = React.useState({
+    trend: true,
+    output: true,
+  });
 
-  function handleDrawerClose() {
-    setOpen(false);
-  }
+  const trendNum = view.trend && view.output ? 9 : view.trend && !view.output ? 12 : 6
+  const outputNum = view.trend && view.output ? 3 : !view.trend && view.output ? 12 : 6
+
+  const selectView = name => event => {
+    setView({ ...view, [name]: event.target.checked });
+  };
+
   function handleToggleTree() {
     setOpen(!open);
+  }
+  function handleCollapse() {
+    setCollapse(!collapse);
   }
 
   return (
@@ -107,11 +147,39 @@ export default function PersistentDrawerLeft() {
             edge="start"
             className={clsx(classes.menuButton, open && classes.closeTree)}
           >
-            {open ? <MenuIcon /> : <MailIcon /> }
+            {open ? <Close /> : <SubdirectoryArrowRight /> }
           </IconButton>
           <Typography variant="h6" noWrap>
             Persistent drawer
           </Typography>
+          <FormGroup row>
+             <FormControlLabel
+               control={
+                 <WhiteCheckbox
+                   checked={view.output}
+                   onChange={selectView('output')}
+                   value="output"
+                   color="secondary"
+                 />
+               }
+               label="Output"
+             />
+             <FormControlLabel
+               control={
+                 <WhiteCheckbox
+                    checked={view.trend}
+                    onChange={selectView('trend')}
+                    value="trend"
+                    color="secondary"
+                  />
+               }
+               label="Trend"
+             />
+          </FormGroup>
+          // {view.trend.toString()}
+          // {view.output.toString()}
+          // {trendNum.toString()}
+          // {outputNum.toString()}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -124,15 +192,15 @@ export default function PersistentDrawerLeft() {
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <IconButton size="small" onClick={handleCollapse}>
+            {collapse ? <UnfoldLess /> : <UnfoldMore />}
           </IconButton>
         </div>
         <Divider />
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
@@ -141,7 +209,7 @@ export default function PersistentDrawerLeft() {
         <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
@@ -153,29 +221,24 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <div className={classes.root}>
+          <Grid container spacing={3}>
+            {view.output ?
+              <Grid item xs={12} sm={outputNum} md={outputNum}>
+                <Paper className={classes.fullpaper}> Output </Paper>
+              </Grid>
+              :
+              null
+            }
+            {view.trend ?
+              <Grid item xs={12} sm={trendNum} md={trendNum}>
+                <Paper className={classes.fullpaper}> Trend </Paper>
+              </Grid>
+              :
+              null
+            }
+          </Grid>
+        </div>
       </main>
     </div>
   );
