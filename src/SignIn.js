@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import ErrorCard from './Components/ErrorCard.js';
 
 import PIAuthentication from './API/PIAuthentication.js';
 
@@ -54,11 +55,11 @@ const useStyles = makeStyles(theme => ({
 
 function SignIn() {
   const classes = useStyles();
-  const tryAuth = PIAuthentication()
+  const {tryAuth, res} = PIAuthentication()
   function handleSubmit() {
     tryAuth({
-      username: 'xxxx',
-      password: 'xxxx',
+      username: 'username',
+      password: 'password1',
     })
   }
 
@@ -109,6 +110,13 @@ function SignIn() {
           >
             Sign In
           </Button>
+
+          {res.isError.error ?
+              <ErrorCard message={res.isError.status + " " + res.isError.message }/>
+              :
+              null
+          }
+
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
