@@ -2,6 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
+import ExpandTree from '../Components/ExpandTree.js';
+import QueryBar from './QueryBar.js';
 
 import {
   Drawer,
@@ -23,6 +25,9 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
+  Select,
+  OutlinedInput,
+  MenuItem,
 } from '@material-ui/core';
 
 import {
@@ -74,8 +79,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     paddingTop: appBarHeight + theme.spacing(2),
-    padding: theme.spacing(2),
-    justifyContent: 'flex-end',
+    padding: theme.spacing(1),
+    justifyContent: 'space-inbetween',
   },
   content: {
     flexGrow: 1,
@@ -119,6 +124,10 @@ const useStyles = makeStyles(theme => ({
   fullgrid: {
     width: '100%',
     height: '100%',
+  },
+  databaseSelect: {
+    width: drawerWidth - theme.spacing(3),
+    marginRight: theme.spacing(1),
   }
 }));
 
@@ -140,7 +149,7 @@ export default function PersistentDrawerLeft() {
   const [collapse, setCollapse] = React.useState(false);
   const [outputView, setOutputView] = React.useState(true);
   const [trendView, setTrendView] = React.useState(true);
-
+  const [database, setDatabase] = React.useState('PIAFPROD')
   const [view, setView] = React.useState({
     trend: true,
     output: true,
@@ -158,6 +167,16 @@ export default function PersistentDrawerLeft() {
   }
   function handleCollapse() {
     setCollapse(!collapse);
+  }
+
+  // function handleChange(event) {
+  //   setDatabase(oldValues => ({
+  //     ...oldValues,
+  //     [event.target.name]: event.target.value,
+  //   }));
+  // }
+  function handleChange(event) {
+    setDatabase(event.target.value)
   }
 
   return (
@@ -183,6 +202,7 @@ export default function PersistentDrawerLeft() {
             <Typography variant="h6" noWrap>
               Explore
             </Typography>
+            <QueryBar/>
           </div>
           <div className={classes.barControls}>
             <FormGroup row>
@@ -222,28 +242,23 @@ export default function PersistentDrawerLeft() {
         }}
       >
         <div className={classes.drawerHeader}>
+          <Select
+           value={database}
+           onChange={handleChange}
+           input={<OutlinedInput name="age" id="outlined-age-simple" />}
+           className={classes.databaseSelect}
+           >
+            <MenuItem value={'PIAFPROD'}>PIAFPROD</MenuItem>
+             <MenuItem value={'Surmont'}>Surmont</MenuItem>
+             <MenuItem value={'Venting'}>Venting</MenuItem>
+             <MenuItem value={'SOL'}>SOL</MenuItem>
+          </Select>
           <IconButton size="small" onClick={handleCollapse}>
             {collapse ? <UnfoldLess /> : <UnfoldMore />}
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <ExpandTree/>
       </Drawer>
       <main
         className={clsx(classes.content, {

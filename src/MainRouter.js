@@ -10,6 +10,7 @@ import {
 import SignIn from './SignIn.js';
 import Home from './Home.js';
 import Explore from './Explore/Explore.js';
+import ExpandTree from './Components/ExpandTree.js';
 
 const auth = false
 
@@ -40,6 +41,7 @@ function MainRouter(){
       <PrivateRoute path='/' exact component={Home}/>
       <Route path='/signin' component={SignIn}/>
       <Route path='/explore' component={Explore}/>
+      <Route path='/testing' component={ExpandTree}/>
     </Router>
   )
 }
